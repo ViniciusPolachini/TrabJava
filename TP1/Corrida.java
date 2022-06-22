@@ -5,42 +5,81 @@ import java.util.*;
 
 public class Corrida{
     private ArrayList<Carro> participantes;
-    private Stack<String> quebrados;
-    private Stack<String> abasteceu;
-    private ArrayList<Carro> dianteira;
-    private int nCorredores;
+    private ArrayList<Carro> colocacao = new ArrayList<Carro>();
+    private int quantidadeCorredores;
+    private int probabilidadeQuebrar;
+    private int probabilidadeAbastecer;
+    public String status;
+    private boolean terminou = false;
 
-    public static void atualizaQuebrados(String nome){
-        quebrados.push(nome);
+    public ArrayList<Carro> getColocacao() {
+        return this.colocacao;
     }
 
-    public static void atualizaAbasteceu(String nome){
-        abasteceu.push(nome);
+    public void atualizar() {
+        status = "";
+        for(int i = 0; i < participantes.size(); i++) {
+            Carro participante = participantes.get(i);
+            if (participante.getCompletou()){
+                //participantes.remove(i);
+                colocacao.add(participante);
+            }
+
+        //     //Montagem das mensagens:
+        //     if(participante.getQuebrado()){
+        //         status += montarMensagemCarroQuebrado(participante.getId());
+        //     } else if (participante.getSemCombustivel()) {
+        //         status += montarMensagemSemCombustivel(participante.getId());
+        //     } else {
+        //         status += montarStatus(participante.getId(), participante.getVoltasExecutadas(), participante.getCompletou());
+        //     }
+
+            status += participante.status;
+            this.terminou = true;
+
+        }
+        // if (colocacao.size() == quantidadeCorredores){
+        //     this.terminou = true;
+        // }
     }
 
-    public static void atualiza(){
-    
-    }
+    // public String montarStatus (long id, long voltasExecutadas, boolean completou) {
+    //     if (completou){
+    //         return ("\nCarro" + id + " - Voltas executadas: " + voltasExecutadas);
+    //     }
+    //     return ("\nCarro" + id + " Terminou a corrida!");
+    // }
 
-    public Corrida(int voltas, int nCorredores){
-        this.nCorredores = nCorredores;
+    // public String montarMensagemCarroQuebrado(long id) {
+    //     return ("\nCarro" + id + " quebrado!");
+    // }
+
+    // public String montarMensagemSemCombustivel(long id) {
+    //     return ("\nCarro" + id + " sem combustivel!");
+    // }
+
+    public Corrida(int voltas, int quantidadeCorredores, float probabilidadeQuebrar, float probabilidadeAbastecer){
+        this.quantidadeCorredores = quantidadeCorredores;
 
         participantes = new ArrayList<Carro>();
-        quebrados = new Stack<String>();
-        abasteceu = new Stack<String>();
-        dianteira = new ArrayList<String>();
 
-        Carro participante;
-
-        for(int i=0; i<3; i++){
-            dianteira = new Carro("",0,0,voltas);
-        }
-
-        for(int i=0; i<nCorredores; i++){
-            participante = new Carro(Integer.toString(i), 10.0, 30.0, voltas);
-            participante.start();
-            participante.run();
+        //Criando os participantes
+        for(int i = 0; i < quantidadeCorredores; i++){
+            Carro participante = new Carro(i, probabilidadeQuebrar, probabilidadeAbastecer, voltas);
             participantes.add(participante);
         }
+    }
+
+    public ArrayList<Carro> iniciarCorrida () {
+        //Preparando os participantes
+        Carro.inicializar();
+        for(Carro participante: participantes) {
+            participante.run();
+        }        
+        //Monitoramento da corrida
+        while (!terminou) {
+            atualizar();
+        }
+        return colocacao;
     }
 }

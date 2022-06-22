@@ -1,16 +1,19 @@
 import java.awt.Font;
 import java.util.ArrayList;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 public class Principal{
 
     private static JFrame tela;
-    private static JPanel painel1;
+    private static JTextArea painel1;
     private static JPanel painel2;
     private static JLabel tituloCorrida;
     private static JLabel labelVoltas;
@@ -23,32 +26,47 @@ public class Principal{
     private static JTextField inputProbAbastecer;
     private static JButton comecar;
 
-    private static JLabel labelStatus;
+    private static JTextArea labelStatus;
     private static JLabel labelColocacao;
     
 
-    public static void main(String args[]) {
-
+    public Principal() {
         criarTela();
         tela.setVisible(true);
-
-        Corrida corrida = new Corrida(30, 10, 10, 10);
-        corrida.iniciarCorrida();
-
-        labelStatus = new JLabel(corrida.status);
-        labelStatus.setBounds(20, 100, 260, 400);
-        labelStatus.setFont(new Font("Arial", Font.PLAIN, 12));
-        painel1.add(labelStatus);
-        //tela.add(labelStatus);
-
-        // System.out.println(corrida.status);
-        // ArrayList<Carro> colocacao = corrida.getColocacao();
-        // for (int i = 0; i < colocacao.size(); i++) {
-        //     System.out.println((i+1) + "º lugar: Carro " + colocacao.get(i).getId());
-        // }
     }
 
-    public static void criarTela() {
+    private class Handler implements ActionListener{
+        public void actionPerformed(ActionEvent event){
+
+            if(event.getSource()==comecar){
+                int voltas = Integer.parseInt(inputVoltas.getText());
+                int nCorredores = Integer.parseInt(inputCorredores.getText());
+                float pQuebrar = Float.parseFloat(inputProbQuebrar.getText());
+                float pAbastecer = Float.parseFloat(inputProbAbastecer.getText());
+
+                if(voltas>=10 && nCorredores>0){
+                    comecaCorrida(voltas, nCorredores, pQuebrar, pAbastecer);
+                }
+            }
+        }
+    }
+
+    public void comecaCorrida(int voltas, int nCorredores, float pQuebrar, float pAbastecer){
+            Corrida corrida = new Corrida(voltas, nCorredores, pQuebrar, pAbastecer);
+            corrida.iniciarCorrida();
+            String status=corrida.status;
+            status+="\n\n";            
+
+            ArrayList<Carro> colocacao = corrida.getColocacao();
+            for (int i = 0; i < colocacao.size(); i++) {
+                status+="\n"+(i+1) + "º lugar: Carro " + colocacao.get(i).getId();
+            }
+            labelStatus.setText(status);
+    }
+
+    public void criarTela() {
+        Handler h = new Handler();
+
         tela = new JFrame();
         tela.setBounds(100, 100, 800, 600);
         tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,17 +115,20 @@ public class Principal{
 
         comecar = new JButton("Começar / Reiniciar");
         comecar.setBounds(295, 200, 200, 50);
+        comecar.addActionListener(h);
         tela.add(comecar);
+
+        labelStatus = new JTextArea();
+        labelStatus.setBounds(100, 270, 500, 200);
+        labelStatus.setFont(new Font("Arial", Font.PLAIN, 12));
+        JScrollPane scroll = new JScrollPane(labelStatus, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        tela.add(scroll);
+        tela.add(labelStatus);
+
 
         // painel1 = new JPanel();
         // painel1.setBounds(20, 270, 260, 400);
         // tela.add(painel1);
-
-        painel1 = new JPanel();
-        painel1.setBounds(10, 20, 500, 400);
-        tela.add(painel1);
-
-        
 
     }
 

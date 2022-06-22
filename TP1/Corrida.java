@@ -25,38 +25,12 @@ public class Corrida{
                 colocacao.add(participante);
             }
 
-        //     //Montagem das mensagens:
-        //     if(participante.getQuebrado()){
-        //         status += montarMensagemCarroQuebrado(participante.getId());
-        //     } else if (participante.getSemCombustivel()) {
-        //         status += montarMensagemSemCombustivel(participante.getId());
-        //     } else {
-        //         status += montarStatus(participante.getId(), participante.getVoltasExecutadas(), participante.getCompletou());
-        //     }
-
             status += participante.status;
-            this.terminou = true;
+            this.terminou = true; // por enquanto so itera uma vez, pois nao utiliza threads ainda
 
         }
-        // if (colocacao.size() == quantidadeCorredores){
-        //     this.terminou = true;
-        // }
     }
 
-    // public String montarStatus (long id, long voltasExecutadas, boolean completou) {
-    //     if (completou){
-    //         return ("\nCarro" + id + " - Voltas executadas: " + voltasExecutadas);
-    //     }
-    //     return ("\nCarro" + id + " Terminou a corrida!");
-    // }
-
-    // public String montarMensagemCarroQuebrado(long id) {
-    //     return ("\nCarro" + id + " quebrado!");
-    // }
-
-    // public String montarMensagemSemCombustivel(long id) {
-    //     return ("\nCarro" + id + " sem combustivel!");
-    // }
 
     public Corrida(int voltas, int quantidadeCorredores, float probabilidadeQuebrar, float probabilidadeAbastecer){
         this.quantidadeCorredores = quantidadeCorredores;
@@ -74,10 +48,10 @@ public class Corrida{
         //Preparando os participantes
         Carro.inicializar();
         for(Carro participante: participantes) {
-            participante.run();
+            participante.run(); // ainda nao faz o uso de threads, por isso chama run ao inves de start
         }        
         //Monitoramento da corrida
-        while (!terminou) {
+        while (!terminou) { // por enquanto so itera uma vez, pois nao utiliza threads ainda
             atualizar();
         }
         return colocacao;

@@ -18,17 +18,20 @@ public class Corrida{
 
     public void atualizar() {
         status = "";
+        boolean aux=true;
         for(int i = 0; i < participantes.size(); i++) {
             Carro participante = participantes.get(i);
             if (participante.getCompletou()){
-                //participantes.remove(i);
+                participantes.remove(i);
                 colocacao.add(participante);
             }
-
+            else if(!participante.getQuebrado() && !participante.getSemCombustivel()){
+                aux=false;
+            }
             status += participante.status;
-            this.terminou = true; // por enquanto so itera uma vez, pois nao utiliza threads ainda
 
         }
+        if(aux) this.terminou=true;
     }
 
 
@@ -40,6 +43,7 @@ public class Corrida{
         //Criando os participantes
         for(int i = 0; i < quantidadeCorredores; i++){
             Carro participante = new Carro(i, probabilidadeQuebrar, probabilidadeAbastecer, voltas);
+            System.out.println(i);
             participantes.add(participante);
         }
     }
@@ -48,11 +52,12 @@ public class Corrida{
         //Preparando os participantes
         Carro.inicializar();
         for(Carro participante: participantes) {
-            participante.run(); // ainda nao faz o uso de threads, por isso chama run ao inves de start
+            participante.start(); // ainda nao faz o uso de threads, por isso chama run ao inves de start
         }        
         //Monitoramento da corrida
         while (!terminou) { // por enquanto so itera uma vez, pois nao utiliza threads ainda
             atualizar();
+            System.out.println("rodando");
         }
         return colocacao;
     }

@@ -12,6 +12,7 @@ public class Carro extends Thread {
     private boolean quebrado = false;
     private boolean semCombustivel = false;
     private boolean completou = false;
+    private boolean check = false;
     public String status;
     private static boolean comecar;
 
@@ -21,6 +22,10 @@ public class Carro extends Thread {
 
     public boolean getSemCombustivel() {
         return semCombustivel;
+    }
+    
+    public boolean getCheck(){
+        return check;
     }
 
     public boolean getCompletou() {
@@ -33,6 +38,10 @@ public class Carro extends Thread {
 
     public long getVoltasExecutadas() {
         return voltasExecutadas;
+    }
+
+    public void setCheck(){
+        check = true;
     }
 
     public static void inicializar() {

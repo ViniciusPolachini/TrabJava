@@ -21,11 +21,11 @@ public class Corrida{
         boolean aux=true;
         for(int i = 0; i < participantes.size(); i++) {
             Carro participante = participantes.get(i);
-            if (participante.getCompletou()){
-                participantes.remove(i);
+            if (participante.getCompletou() && !participante.getCheck()){
+                participante.setCheck();
                 colocacao.add(participante);
             }
-            else if(!participante.getQuebrado() && !participante.getSemCombustivel()){
+            else if(!participante.getQuebrado() && !participante.getSemCombustivel() && !participante.getCheck()){
                 aux=false;
             }
             status += participante.status;
@@ -43,7 +43,6 @@ public class Corrida{
         //Criando os participantes
         for(int i = 0; i < quantidadeCorredores; i++){
             Carro participante = new Carro(i, probabilidadeQuebrar, probabilidadeAbastecer, voltas);
-            System.out.println(i);
             participantes.add(participante);
         }
     }
@@ -57,7 +56,6 @@ public class Corrida{
         //Monitoramento da corrida
         while (!terminou) { // por enquanto so itera uma vez, pois nao utiliza threads ainda
             atualizar();
-            System.out.println("rodando");
         }
         return colocacao;
     }

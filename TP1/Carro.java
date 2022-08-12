@@ -2,6 +2,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+
 public class Carro extends Thread {
     private int id;
     private int voltas;
@@ -86,6 +87,7 @@ public class Carro extends Thread {
                         status += montarMensagemSemCombustivel(id, voltasExecutadas);
                         break;
                     } else{
+                        Principal.distanciaPercorrida(distancia, voltasExecutadas, id);
                         distancia+=1;
                     }
                 }

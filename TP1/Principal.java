@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import java.io.*;
+
 
 public class Principal{
 
@@ -62,6 +64,10 @@ public class Principal{
                 status+="\n"+(i+1) + "º lugar: Carro " + colocacao.get(i).getId();
             }
             labelStatus.setText(status);
+    }
+
+    static public void distanciaPercorrida(int distancia, int volta, int carro){
+        System.out.println(String.valueOf(carro)+": distancia-"+String.valueOf(distancia)+" volta-"+String.valueOf(volta));
     }
 
     public void criarTela() {
